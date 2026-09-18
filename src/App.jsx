@@ -214,7 +214,7 @@ function EnterOverlay({ onEnter }) {
     <motion.div 
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 1.5 } }}
-      className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-black cursor-pointer"
+      className="fixed inset-0 z-[99999] flex flex-col items-start justify-start bg-black cursor-pointer overscroll-y-contain"
       onClick={onEnter}
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-900/40 via-black to-black opacity-60" />
@@ -238,8 +238,14 @@ export default function App() {
 
 
 
-  const [hasEntered, setHasEntered] = useState(false);
+    const [hasEntered, setHasEntered] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (document.body) document.body.scrollTop = 0;
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+  }, [currentSlide]);
 
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
@@ -351,7 +357,7 @@ function EntranceSlide({ onNext }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 1.5 } }}
-      className="absolute inset-0 flex flex-col items-center justify-center bg-transparent overflow-hidden"
+      className="absolute inset-0 flex flex-col items-start justify-start bg-transparent overflow-hidden overscroll-y-contain"
     >
       {/* Heavy Cinematic Background - Deep Velvet & Gold */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-200 via-peach to-pink-100" />
@@ -539,48 +545,54 @@ function EntranceSlide({ onNext }) {
 }
 
 function MemorySlide({ onNext }) {
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, []);
+
   return (
     <motion.div
+      ref={scrollRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 bg-transparent overflow-y-auto"
+      className="absolute inset-0 flex flex-col items-center justify-start p-3 md:p-8 bg-transparent overflow-y-auto overscroll-contain"
     >
-      <div className="z-10 w-full max-w-7xl flex flex-col items-center py-10">
-        <div className="flex items-center gap-4 mb-16 md:mb-24">
+      <div className="z-10 w-full max-w-7xl flex flex-col items-center pt-3 md:pt-8 pb-32">
+        <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-16">
           <div className="w-8 md:w-16 h-1 bg-rose-400 rounded-full shadow-[0_0_10px_#FFB6C1]" />
           <motion.h2 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-3xl md:text-6xl font-serif font-bold text-rose-700 text-center tracking-wide drop-shadow-md"
+            className="text-2xl md:text-6xl font-serif font-bold text-rose-700 text-center tracking-wide drop-shadow-md"
           >
             The Beginning
           </motion.h2>
           <div className="w-8 md:w-16 h-1 bg-rose-400 rounded-full shadow-[0_0_10px_#FFB6C1]" />
         </div>
         
-        <div className="flex flex-col md:flex-row flex-wrap justify-center gap-20 md:gap-24 w-full perspective-1000 mt-10 pb-20">
+        <div className="flex flex-col md:flex-row flex-wrap justify-center gap-12 md:gap-24 w-full perspective-1000 mt-4 md:mt-10">
           {[7, 11].map((item, idx) => (
             <motion.div
               key={item}
-              initial={{ opacity: 0, rotateY: 45, y: -100 }}
+              initial={{ opacity: 0, rotateY: 45, y: -40 }}
               animate={{ opacity: 1, rotateY: 0, y: 0 }}
-              transition={{ delay: idx * 0.4, duration: 1.5, type: "spring", bounce: 0.4 }}
-              className="relative w-full max-w-[320px] mx-auto group"
+              transition={{ delay: idx * 0.3, duration: 1.2, type: "spring", bounce: 0.3 }}
+              className="relative w-full max-w-[270px] md:max-w-[320px] mx-auto group"
             >
               {/* Hanging String & Pin */}
-              <div className="absolute -top-16 left-1/2 w-0.5 h-16 bg-gray-300 origin-top z-0" />
-              <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-4 h-4 bg-red-500 rounded-full shadow-sm z-10" />
+              <div className="absolute -top-8 md:-top-16 left-1/2 w-0.5 h-8 md:h-16 bg-gray-300 origin-top z-0" />
+              <div className="absolute -top-8 md:-top-16 left-1/2 -translate-x-1/2 w-3.5 h-3.5 md:w-4 md:h-4 bg-red-500 rounded-full shadow-sm z-10" />
 
               <motion.div
                 whileHover={{ rotate: (idx % 2 === 0 ? 3 : -3), scale: 1.05, z: 20 }}
                 transition={{ type: "spring", stiffness: 300 }}
                 style={{ transformOrigin: "top center" }}
-                className="relative aspect-[3/4] bg-white p-4 md:p-6 pb-16 md:pb-24 rounded-sm border border-gray-200 shadow-[0_20px_50px_rgba(0,0,0,0.15)] group-hover:shadow-[0_30px_60px_rgba(255,182,193,0.5)] transition-shadow duration-500 z-10"
+                className="relative aspect-[3/4] bg-white p-3 md:p-6 pb-14 md:pb-24 rounded-sm border border-gray-200 shadow-[0_20px_50px_rgba(0,0,0,0.15)] group-hover:shadow-[0_30px_60px_rgba(255,182,193,0.5)] transition-shadow duration-500 z-10"
               >
                 {/* Tape */}
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-white/40 backdrop-blur-sm border border-white/50 rotate-[-2deg] shadow-sm z-30" />
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 md:w-24 h-5 md:h-6 bg-white/40 backdrop-blur-sm border border-white/50 rotate-[-2deg] shadow-sm z-30" />
                 
                 <div className="w-full h-full bg-white rounded-sm overflow-hidden relative shadow-inner">
                   <img 
@@ -591,8 +603,8 @@ function MemorySlide({ onNext }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-rose-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
                 
-                <div className="absolute bottom-6 left-0 right-0 z-20 text-center px-4">
-                  <p className="text-gray-800 font-serif text-3xl font-bold tracking-widest" style={{ fontFamily: "'Caveat', cursive, serif" }}>
+                <div className="absolute bottom-4 md:bottom-6 left-0 right-0 z-20 text-center px-4">
+                  <p className="text-gray-800 font-serif text-2xl md:text-3xl font-bold tracking-widest" style={{ fontFamily: "'Caveat', cursive, serif" }}>
                     {item === 7 ? 'First Glance' : 'Lost in Time'}
                   </p>
                 </div>
@@ -607,32 +619,37 @@ function MemorySlide({ onNext }) {
 
 function GallerySlide({ onNext }) {
   const [selectedId, setSelectedId] = useState(null);
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, []);
 
   const photos = [
-    { id: 3, span: "col-span-1 row-span-1", text: "Endless Joy" },
-    { id: 10, span: "col-span-1 md:col-span-2 row-span-1 md:row-span-2", text: "Perfect Days" },
-    { id: 5, span: "col-span-1 row-span-1", text: "Forever" }
+    { id: 3, span: "col-span-1 md:col-span-1 row-span-1 md:row-span-1", text: "Endless Joy" },
+    { id: 10, span: "col-span-2 md:col-span-2 row-span-2 md:row-span-2", text: "Perfect Days" },
+    { id: 5, span: "col-span-1 md:col-span-1 row-span-1 md:row-span-1", text: "Forever" }
   ];
 
   return (
     <motion.div
+      ref={scrollRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-12 bg-transparent overflow-y-auto"
+      className="absolute inset-0 flex flex-col items-center justify-start p-4 md:p-12 bg-transparent overflow-y-auto overscroll-contain"
     >
-      <div className="w-full max-w-5xl flex flex-col min-h-min py-10 md:py-0">
+      <div className="w-full max-w-5xl flex flex-col min-h-min pt-2 md:pt-0 pb-32">
         <motion.div 
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
-          className="mb-8 pl-4 border-l-4 border-rose-500"
+          className="mb-4 md:mb-8 pl-4 border-l-4 border-rose-500"
         >
-          <h2 className="text-3xl md:text-6xl font-serif font-bold text-[#800020] tracking-wide drop-shadow-sm">A Lifetime of</h2>
-          <h2 className="text-4xl md:text-7xl font-serif font-bold text-rose-500 italic drop-shadow-sm">Moments</h2>
+          <h2 className="text-2xl md:text-6xl font-serif font-bold text-[#800020] tracking-wide drop-shadow-sm">A Lifetime of</h2>
+          <h2 className="text-3xl md:text-7xl font-serif font-bold text-rose-500 italic drop-shadow-sm">Moments</h2>
         </motion.div>
 
-        <div className="grid grid-flow-dense grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-4 md:gap-6 w-full mt-4 pb-20">
+        <div className="grid grid-flow-dense grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-6 w-full mt-2 md:mt-4">
           {photos.map((photo, i) => (
             <motion.div
               layoutId={`gallery-img-${photo.id}`}
@@ -641,7 +658,7 @@ function GallerySlide({ onNext }) {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 + (i * 0.15), duration: 0.8 }}
-              className={`relative overflow-hidden rounded-3xl border-4 border-white shadow-[0_15px_40px_rgba(255,182,193,0.6)] group cursor-pointer bg-white ${photo.span} aspect-square md:aspect-auto min-h-[150px]`}
+              className={`relative overflow-hidden rounded-2xl md:rounded-3xl border-3 md:border-4 border-white shadow-[0_15px_40px_rgba(255,182,193,0.6)] group cursor-pointer bg-white ${photo.span} aspect-square md:aspect-auto min-h-[140px] md:min-h-[150px]`}
             >
               <div className="absolute inset-0 bg-rose-500/10 group-hover:bg-transparent transition-all duration-500 z-10 pointer-events-none" />
               <img 
@@ -649,8 +666,8 @@ function GallerySlide({ onNext }) {
                 className="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-1000 ease-out"
                 alt="Gallery"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#800020]/90 via-[#800020]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 flex items-end p-6 pointer-events-none">
-                <p className="text-white font-serif text-2xl font-bold italic tracking-wide translate-y-4 group-hover:translate-y-0 transition-transform duration-500 drop-shadow-md">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#800020]/90 via-[#800020]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 flex items-end p-4 md:p-6 pointer-events-none">
+                <p className="text-white font-serif text-lg md:text-2xl font-bold italic tracking-wide translate-y-4 group-hover:translate-y-0 transition-transform duration-500 drop-shadow-md">
                   {photo.text}
                 </p>
               </div>
@@ -687,6 +704,10 @@ function GallerySlide({ onNext }) {
 
 function ReasonsSlide({ onNext }) {
   const [flipped, setFlipped] = useState(null);
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, []);
   
   const reasons = [
     "Your smile lights up my darkest days.",
@@ -698,29 +719,30 @@ function ReasonsSlide({ onNext }) {
 
   return (
     <motion.div
+      ref={scrollRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 bg-transparent overflow-y-auto"
+      className="absolute inset-0 flex flex-col items-center justify-start p-4 md:p-8 bg-transparent overflow-y-auto overscroll-contain"
     >
-      <div className="z-10 w-full max-w-6xl flex flex-col items-center py-10">
+      <div className="z-10 w-full max-w-6xl flex flex-col items-center pt-3 md:pt-10 pb-32">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1 }}
-          className="bg-white/60 backdrop-blur-xl px-12 py-4 rounded-full border border-white mb-12 shadow-[0_10px_30px_rgba(255,182,193,0.5)]"
+          className="bg-white/60 backdrop-blur-xl px-8 py-3 md:px-12 md:py-4 rounded-full border border-white mb-6 md:mb-12 shadow-[0_10px_30px_rgba(255,182,193,0.5)]"
         >
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-rose-600 tracking-wide">Why I Love You</h2>
+          <h2 className="text-2xl md:text-5xl font-serif font-bold text-rose-600 tracking-wide">Why I Love You</h2>
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-6 w-full perspective-1000 pb-20">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6 w-full perspective-1000">
           {reasons.map((reason, i) => (
             <motion.div
               key={i}
-              className="relative w-full md:w-[calc(33%-1rem)] max-w-[300px] aspect-[4/3] cursor-pointer group"
-              initial={{ opacity: 0, y: 50, rotateX: -20 }}
+              className="relative w-full md:w-[calc(33%-1rem)] max-w-[280px] md:max-w-[300px] aspect-[4/3] cursor-pointer group"
+              initial={{ opacity: 0, y: 30, rotateX: -20 }}
               animate={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{ delay: i * 0.2, duration: 0.8, type: "spring" }}
+              transition={{ delay: i * 0.15, duration: 0.7, type: "spring" }}
               onClick={() => setFlipped(flipped === i ? null : i)}
               style={{ perspective: 1000 }}
             >
@@ -734,17 +756,17 @@ function ReasonsSlide({ onNext }) {
                   className="absolute inset-0 w-full h-full bg-white/80 backdrop-blur-md border-2 border-white rounded-2xl flex flex-col items-center justify-center backface-hidden"
                   style={{ backfaceVisibility: "hidden" }}
                 >
-                  <Heart className="w-10 h-10 text-rose-300 mb-4 drop-shadow-sm group-hover:scale-110 transition-transform" />
-                  <h3 className="text-2xl font-serif font-bold text-rose-600">Reason #{i + 1}</h3>
-                  <p className="text-sm text-rose-400 mt-2 font-medium">Tap to Reveal</p>
+                  <Heart className="w-8 h-8 md:w-10 md:h-10 text-rose-300 mb-3 md:mb-4 drop-shadow-sm group-hover:scale-110 transition-transform" />
+                  <h3 className="text-xl md:text-2xl font-serif font-bold text-rose-600">Reason #{i + 1}</h3>
+                  <p className="text-xs md:text-sm text-rose-400 mt-2 font-medium">Tap to Reveal</p>
                 </div>
 
                 {/* Back of Card */}
                 <div 
-                  className="absolute inset-0 w-full h-full bg-gradient-to-br from-rose-400 to-pink-500 border-2 border-white rounded-2xl flex items-center justify-center p-6 backface-hidden shadow-inner"
+                  className="absolute inset-0 w-full h-full bg-gradient-to-br from-rose-400 to-pink-500 border-2 border-white rounded-2xl flex items-center justify-center p-4 md:p-6 backface-hidden shadow-inner"
                   style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                 >
-                  <p className="text-white font-serif text-xl md:text-2xl font-bold text-center leading-relaxed drop-shadow-md">
+                  <p className="text-white font-serif text-lg md:text-2xl font-bold text-center leading-relaxed drop-shadow-md">
                     "{reason}"
                   </p>
                 </div>
@@ -757,10 +779,13 @@ function ReasonsSlide({ onNext }) {
   );
 }
 
-
 function PromiseSlide({ onNext }) {
   const [opened, setOpened] = useState(false);
   const [waxBroken, setWaxBroken] = useState(false);
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, []);
 
   const handleOpen = () => {
     setWaxBroken(true);
@@ -771,29 +796,30 @@ function PromiseSlide({ onNext }) {
 
   return (
     <motion.div
+      ref={scrollRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 bg-transparent overflow-y-auto overflow-x-hidden"
+      className="absolute inset-0 flex flex-col items-center justify-start p-4 md:p-8 bg-transparent overflow-y-auto overflow-x-hidden overscroll-contain"
     >
-      <div className="w-full max-w-4xl flex flex-col items-center py-10 perspective-1000">
+      <div className="w-full max-w-4xl flex flex-col items-center pt-4 md:pt-10 pb-32 perspective-1000">
         
         <AnimatePresence mode="wait">
           {!opened ? (
             <motion.div
               key="envelope"
-              initial={{ y: 50, rotateX: 30, opacity: 0 }}
+              initial={{ y: 30, rotateX: 30, opacity: 0 }}
               animate={{ y: 0, rotateX: 0, opacity: 1 }}
               exit={{ scale: 1.5, opacity: 0, filter: "blur(20px)" }}
               transition={{ duration: 1, type: "spring", bounce: 0.5 }}
               onClick={handleOpen}
-              className="relative w-[300px] h-[225px] md:w-[400px] md:h-[300px] cursor-pointer group mt-20 md:mt-24 mx-auto"
+              className="relative w-[280px] h-[210px] md:w-[400px] md:h-[300px] cursor-pointer group mt-6 md:mt-20 mx-auto"
             >
               {/* Envelope Body */}
               <div className="absolute inset-0 bg-gradient-to-br from-pink-100 to-pink-200 shadow-[0_30px_60px_rgba(255,182,193,0.6)] rounded-lg border border-pink-300 overflow-hidden">
                 {/* Envelope Flap Base */}
-                <div className="absolute top-0 left-0 w-full h-full border-t-[112px] md:border-t-[150px] border-t-pink-200 border-l-[150px] md:border-l-[200px] border-l-transparent border-r-[150px] md:border-r-[200px] border-r-transparent origin-top z-10 drop-shadow-md" />
-                <div className="absolute bottom-0 left-0 w-full h-full border-b-[113px] md:border-b-[150px] border-b-pink-100 border-l-[150px] md:border-l-[200px] border-l-transparent border-r-[150px] md:border-r-[200px] border-r-transparent z-20 drop-shadow-sm" />
+                <div className="absolute top-0 left-0 w-full h-full border-t-[105px] md:border-t-[150px] border-t-pink-200 border-l-[140px] md:border-l-[200px] border-l-transparent border-r-[140px] md:border-r-[200px] border-r-transparent origin-top z-10 drop-shadow-md" />
+                <div className="absolute bottom-0 left-0 w-full h-full border-b-[105px] md:border-b-[150px] border-b-pink-100 border-l-[140px] md:border-l-[200px] border-l-transparent border-r-[140px] md:border-r-[200px] border-r-transparent z-20 drop-shadow-sm" />
                 
                 {/* Wax Seal */}
                 <motion.div 
@@ -801,13 +827,13 @@ function PromiseSlide({ onNext }) {
                   animate={{ scale: waxBroken ? 1.5 : [1, 1.05, 1] }}
                   transition={{ duration: waxBroken ? 0.5 : 2, repeat: waxBroken ? 0 : Infinity }}
                 >
-                  <div className="relative w-16 h-16 md:w-20 md:h-20">
+                  <div className="relative w-14 h-14 md:w-20 md:h-20">
                     <motion.div 
                       className="absolute inset-0 bg-red-600 rounded-full shadow-[inset_0_-4px_8px_rgba(0,0,0,0.4),0_5px_15px_rgba(220,38,38,0.6)] border-2 border-red-700 flex items-center justify-center"
                       animate={waxBroken ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Heart className="w-8 h-8 md:w-10 md:h-10 text-red-300 fill-red-800 drop-shadow-md" />
+                      <Heart className="w-7 h-7 md:w-10 md:h-10 text-red-300 fill-red-800 drop-shadow-md" />
                     </motion.div>
                     
                     {/* Broken Wax Particles */}
@@ -843,16 +869,16 @@ function PromiseSlide({ onNext }) {
                   />
                 )}
                 
-                <p className="absolute bottom-6 left-0 right-0 text-center text-pink-400 font-serif italic text-sm tracking-widest font-bold z-20">Tap to Break Seal</p>
+                <p className="absolute bottom-4 md:bottom-6 left-0 right-0 text-center text-pink-400 font-serif italic text-xs md:text-sm tracking-widest font-bold z-20">Tap to Break Seal</p>
               </div>
             </motion.div>
           ) : (
             <motion.div
               key="letter"
-              initial={{ y: 100, opacity: 0, rotateX: -20, scale: 0.8 }}
+              initial={{ y: 50, opacity: 0, rotateX: -20, scale: 0.9 }}
               animate={{ y: 0, opacity: 1, rotateX: 0, scale: 1 }}
               transition={{ duration: 1.5, type: "spring", bounce: 0.3 }}
-              className="relative w-full max-w-2xl bg-white/90 backdrop-blur-xl p-6 md:p-16 rounded-sm shadow-[0_20px_60px_rgba(255,182,193,0.5)] border border-pink-100 z-30"
+              className="relative w-full max-w-2xl bg-white/90 backdrop-blur-xl p-5 md:p-16 rounded-sm shadow-[0_20px_60px_rgba(255,182,193,0.5)] border border-pink-100 z-30 my-4 md:my-0"
             >
               <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20" style={{ backgroundImage: "radial-gradient(#fb7185 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
               
@@ -901,7 +927,7 @@ function CakeSlide({ onNext }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 1.5 } }}
-      className="absolute inset-0 flex flex-col items-center justify-center bg-transparent overflow-hidden"
+      className="absolute inset-0 flex flex-col items-start justify-start bg-transparent overflow-hidden overscroll-y-contain"
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-200 via-peach to-pink-100" />
       
@@ -1133,13 +1159,17 @@ function CakeSlide({ onNext }) {
 }
 
 function FinaleSlide() {
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, []);
   const [opened, setOpened] = useState(false);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 bg-transparent overflow-y-auto"
+      className="absolute inset-0 flex flex-col items-center justify-start p-4 md:p-8 bg-transparent overflow-y-auto overscroll-contain" ref={scrollRef}
     >
       <div className="absolute inset-0 bg-black/90 pointer-events-none transition-opacity duration-[3000ms]" style={{ opacity: opened ? 1 : 0 }} />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-300/30 via-transparent to-transparent opacity-60" />
