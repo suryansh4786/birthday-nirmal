@@ -666,8 +666,9 @@ function GallerySlide({ onNext }) {
                 className="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-1000 ease-out"
                 alt="Gallery"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#800020]/90 via-[#800020]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 flex items-end p-4 md:p-6 pointer-events-none">
-                <p className="text-white font-serif text-lg md:text-2xl font-bold italic tracking-wide translate-y-4 group-hover:translate-y-0 transition-transform duration-500 drop-shadow-md">
+              {/* Bottom Caption Overlay - Always visible on mobile and desktop */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#800020]/95 via-[#800020]/60 to-transparent pt-8 pb-3 px-3 md:pb-5 md:px-5 z-20 flex items-end pointer-events-none">
+                <p className="text-white font-serif text-base md:text-2xl font-bold italic tracking-wide drop-shadow-md group-hover:scale-105 transition-transform duration-300">
                   {photo.text}
                 </p>
               </div>
@@ -687,13 +688,16 @@ function GallerySlide({ onNext }) {
           >
             <motion.div
               layoutId={`gallery-img-${selectedId}`}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white p-2 rounded-2xl shadow-2xl"
+              className="relative w-full max-w-4xl max-h-[90vh] bg-white p-3 rounded-2xl shadow-2xl flex flex-col items-center"
             >
               <img 
                 src={`/img-${selectedId}.jpg`} 
-                className="w-full h-full object-contain max-h-[85vh] rounded-xl"
+                className="w-full h-full object-contain max-h-[75vh] rounded-xl"
                 alt="Expanded Gallery"
               />
+              <p className="text-[#800020] font-serif text-xl md:text-3xl font-bold italic mt-3 tracking-wide text-center">
+                {photos.find(p => p.id === selectedId)?.text}
+              </p>
             </motion.div>
           </motion.div>
         )}
