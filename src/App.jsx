@@ -254,7 +254,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-br from-peach via-pink-100 to-peach text-[#800020] overflow-hidden font-sans">
+    <div className="relative w-full h-[100dvh] bg-gradient-to-br from-peach via-pink-100 to-peach text-[#800020] overflow-hidden font-sans w-screen max-w-[100vw]">
       <AnimatePresence>
         {!hasEntered && (
           <EnterOverlay key="enter-overlay" onEnter={() => setHasEntered(true)} />
@@ -560,7 +560,7 @@ function MemorySlide({ onNext }) {
           <div className="w-8 md:w-16 h-1 bg-rose-400 rounded-full shadow-[0_0_10px_#FFB6C1]" />
         </div>
         
-        <div className="flex flex-col md:flex-row flex-wrap justify-center gap-16 md:gap-24 w-full perspective-1000 mt-10">
+        <div className="flex flex-col md:flex-row flex-wrap justify-center gap-20 md:gap-24 w-full perspective-1000 mt-10 pb-20">
           {[7, 11].map((item, idx) => (
             <motion.div
               key={item}
@@ -632,7 +632,7 @@ function GallerySlide({ onNext }) {
           <h2 className="text-4xl md:text-7xl font-serif font-bold text-rose-500 italic drop-shadow-sm">Moments</h2>
         </motion.div>
 
-        <div className="flex flex-col md:grid md:grid-cols-4 md:grid-rows-2 gap-6 w-full mt-4">
+        <div className="grid grid-flow-dense grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-4 md:gap-6 w-full mt-4 pb-20">
           {photos.map((photo, i) => (
             <motion.div
               layoutId={`gallery-img-${photo.id}`}
@@ -641,7 +641,7 @@ function GallerySlide({ onNext }) {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 + (i * 0.15), duration: 0.8 }}
-              className={`relative overflow-hidden rounded-3xl border-4 border-white shadow-[0_15px_40px_rgba(255,182,193,0.6)] group cursor-pointer bg-white ${photo.span} aspect-square md:aspect-auto`}
+              className={`relative overflow-hidden rounded-3xl border-4 border-white shadow-[0_15px_40px_rgba(255,182,193,0.6)] group cursor-pointer bg-white ${photo.span} aspect-square md:aspect-auto min-h-[150px]`}
             >
               <div className="absolute inset-0 bg-rose-500/10 group-hover:bg-transparent transition-all duration-500 z-10 pointer-events-none" />
               <img 
@@ -713,7 +713,7 @@ function ReasonsSlide({ onNext }) {
           <h2 className="text-3xl md:text-5xl font-serif font-bold text-rose-600 tracking-wide">Why I Love You</h2>
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-6 w-full perspective-1000">
+        <div className="flex flex-wrap justify-center gap-6 w-full perspective-1000 pb-20">
           {reasons.map((reason, i) => (
             <motion.div
               key={i}
