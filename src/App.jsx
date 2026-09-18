@@ -214,7 +214,7 @@ function EnterOverlay({ onEnter }) {
     <motion.div 
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 1.5 } }}
-      className="fixed inset-0 z-[99999] flex flex-col items-start justify-start bg-black cursor-pointer overscroll-y-contain"
+      className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-black cursor-pointer overscroll-none select-none"
       onClick={onEnter}
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-900/40 via-black to-black opacity-60" />
@@ -357,7 +357,7 @@ function EntranceSlide({ onNext }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 1.5 } }}
-      className="absolute inset-0 flex flex-col items-start justify-start bg-transparent overflow-hidden overscroll-y-contain"
+      className="absolute inset-0 flex flex-col items-center justify-center bg-transparent overflow-hidden overscroll-none"
     >
       {/* Heavy Cinematic Background - Deep Velvet & Gold */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-200 via-peach to-pink-100" />
@@ -927,7 +927,7 @@ function CakeSlide({ onNext }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 1.5 } }}
-      className="absolute inset-0 flex flex-col items-start justify-start bg-transparent overflow-hidden overscroll-y-contain"
+      className="absolute inset-0 flex flex-col items-center justify-center bg-transparent overflow-hidden overscroll-none"
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-200 via-peach to-pink-100" />
       
